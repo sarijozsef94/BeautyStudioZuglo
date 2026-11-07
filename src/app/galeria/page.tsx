@@ -88,42 +88,21 @@ const galleryItems = [
   },
   {
     id: 11,
-    title: 'Professzionális Vagheggi termékek',
-    category: 'salon',
-    categoryName: 'Kozmetika & Szalon',
+    title: 'Szemöldök és szempilla styling',
+    category: 'brows',
+    categoryName: 'Szemöldök styling',
     src: '/images/gallery-salon-5.jpg',
-    desc: 'Csúcsminőségű olasz fitoterápiás hatóanyagok.',
+    desc: 'Természetes hatású, gondosan formázott szemöldök és pillák.',
   },
 ];
 
 export default function GalleryPage() {
   const [activeTab, setActiveTab] = useState('all');
   const [activeModal, setActiveModal] = useState<typeof galleryItems[0] | null>(null);
-
-  const handleFilterClick = (tabId: string) => {
-    setActiveTab(tabId);
-    if (typeof document !== 'undefined') {
-      const cards = document.querySelectorAll<HTMLElement>('[data-gallery-card]');
-      cards.forEach((card) => {
-        const itemCat = card.getAttribute('data-category');
-        if (tabId === 'all' || itemCat === tabId) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-      const btns = document.querySelectorAll<HTMLElement>('[data-filter-gallery]');
-      btns.forEach((btn) => {
-        if (btn.getAttribute('data-filter-gallery') === tabId) {
-          btn.classList.add('bg-[#0F172A]', 'text-white', 'shadow-md');
-          btn.classList.remove('bg-white', 'text-stone-600', 'border-stone-200');
-        } else {
-          btn.classList.remove('bg-[#0F172A]', 'text-white', 'shadow-md');
-          btn.classList.add('bg-white', 'text-stone-600', 'border-stone-200');
-        }
-      });
-    }
-  };
+  const visibleGalleryItems =
+    activeTab === 'all'
+      ? galleryItems
+      : galleryItems.filter((item) => item.category === activeTab);
 
   return (
     <div>
@@ -166,8 +145,8 @@ export default function GalleryPage() {
               <button
                 key={tab.id}
                 type="button"
-                data-filter-gallery={tab.id}
-                onClick={() => handleFilterClick(tab.id)}
+                aria-pressed={activeTab === tab.id}
+                onClick={() => setActiveTab(tab.id)}
                 className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all cursor-pointer select-none ${
                   activeTab === tab.id
                     ? 'bg-[#0F172A] text-white shadow-md'
@@ -179,18 +158,11 @@ export default function GalleryPage() {
             ))}
           </div>
 
-          {/* Grid - All items in DOM for instant native filtering */}
+          {/* Gallery grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="gallery-grid">
-            {galleryItems.map((item) => (
+            {visibleGalleryItems.map((item) => (
               <div
                 key={item.id}
-                data-gallery-card="true"
-                data-category={item.category}
-                data-title={item.title}
-                data-category-name={item.categoryName}
-                data-desc={item.desc}
-                data-src={item.src}
-                style={{ display: activeTab === 'all' || activeTab === item.category ? 'block' : 'none' }}
                 onClick={() => setActiveModal(item)}
                 className="group relative rounded-2xl overflow-hidden bg-white shadow-sm border border-[#E6C887]/30 cursor-pointer aspect-square"
               >
@@ -287,116 +259,6 @@ export default function GalleryPage() {
         </div>
       )}
 
-      {/* Standalone Native Lightbox Modal (guarantees modal works even without React hydration) */}
-      <div
-        id="native-gallery-modal"
-        style={{ display: 'none' }}
-        className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
-      >
-        <div
-          className="relative max-w-4xl w-full bg-[#0F172A] text-white rounded-3xl overflow-hidden border border-[#DCA54A]/30 shadow-2xl"
-        >
-          <button
-            type="button"
-            id="native-modal-close"
-            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/60 text-white hover:bg-[#DCA54A] hover:text-[#0F172A] transition cursor-pointer"
-            aria-label="Bezárás"
-          >
-            ✕
-          </button>
-          <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full bg-black flex items-center justify-center">
-            <img id="native-modal-img" src="" alt="" className="max-h-full max-w-full object-contain" />
-          </div>
-          <div className="p-6 bg-[#0F172A] border-t border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-              <span id="native-modal-cat" className="text-xs uppercase tracking-wider text-[#DCA54A] font-semibold block"></span>
-              <h3 id="native-modal-title" className="text-lg font-serif font-medium text-white mt-1"></h3>
-              <p id="native-modal-desc" className="text-stone-400 text-xs mt-1"></p>
-            </div>
-            <a
-              href="/kapcsolat"
-              className="inline-flex items-center space-x-2 bg-[#DCA54A] text-[#0F172A] text-xs font-bold uppercase tracking-wider px-6 py-2.5 rounded-full hover:bg-[#E6B65C] transition flex-shrink-0"
-            >
-              <span>Időpont kérése</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Embedded Client-side Fallback Script (guarantees tab filtering and modal work everywhere) */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              function attachGalleryEvents() {
-                var container = document.getElementById('gallery-filter-container');
-                if (container) {
-                  container.addEventListener('click', function(e) {
-                    var btn = e.target.closest('[data-filter-gallery]');
-                    if (!btn) return;
-                    var targetCat = btn.getAttribute('data-filter-gallery');
-                    var btns = container.querySelectorAll('[data-filter-gallery]');
-                    for (var i = 0; i < btns.length; i++) {
-                      var b = btns[i];
-                      if (b.getAttribute('data-filter-gallery') === targetCat) {
-                        b.className = 'px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all cursor-pointer select-none bg-[#0F172A] text-white shadow-md';
-                      } else {
-                        b.className = 'px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all cursor-pointer select-none bg-white text-stone-600 hover:bg-[#FAF5E5] hover:text-[#B57E29] border border-stone-200';
-                      }
-                    }
-                    var cards = document.querySelectorAll('[data-gallery-card]');
-                    for (var j = 0; j < cards.length; j++) {
-                      var c = cards[j];
-                      var itemCat = c.getAttribute('data-category');
-                      if (targetCat === 'all' || itemCat === targetCat) {
-                        c.style.setProperty('display', 'block', 'important');
-                      } else {
-                        c.style.setProperty('display', 'none', 'important');
-                      }
-                    }
-                  });
-                }
-
-                // Native Modal fallback
-                var nativeModal = document.getElementById('native-gallery-modal');
-                var modalImg = document.getElementById('native-modal-img');
-                var modalTitle = document.getElementById('native-modal-title');
-                var modalCat = document.getElementById('native-modal-cat');
-                var modalDesc = document.getElementById('native-modal-desc');
-                var closeBtn = document.getElementById('native-modal-close');
-
-                document.addEventListener('click', function(e) {
-                  var card = e.target.closest('[data-gallery-card]');
-                  if (card && nativeModal) {
-                    modalImg.src = card.getAttribute('data-src') || '';
-                    modalTitle.textContent = card.getAttribute('data-title') || '';
-                    modalCat.textContent = card.getAttribute('data-category-name') || '';
-                    modalDesc.textContent = card.getAttribute('data-desc') || '';
-                    nativeModal.style.display = 'flex';
-                  }
-                });
-
-                if (closeBtn && nativeModal) {
-                  closeBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    nativeModal.style.display = 'none';
-                  });
-                  nativeModal.addEventListener('click', function(e) {
-                    if (e.target === nativeModal) {
-                      nativeModal.style.display = 'none';
-                    }
-                  });
-                }
-              }
-              if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', attachGalleryEvents);
-              } else {
-                attachGalleryEvents();
-              }
-            })();
-          `,
-        }}
-      />
     </div>
   );
 }

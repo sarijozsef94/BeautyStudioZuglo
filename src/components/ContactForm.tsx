@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { Send, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 
@@ -16,12 +16,13 @@ export default function ContactForm({ defaultService }: ContactFormProps) {
     service: defaultService || '',
     message: '',
     privacy: false,
-    honeypot: '', // bot trap
+    website: '',
   });
 
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [responseMsg, setResponseMsg] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const isSubmitting = useRef(false);
 
   const servicesList = [
     'Bőrállapot felmérés és konzultáció (10 000 Ft)',
@@ -43,6 +44,7 @@ export default function ContactForm({ defaultService }: ContactFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting.current) return;
     setFieldErrors({});
 
     // Client-side quick check
@@ -68,20 +70,41 @@ export default function ContactForm({ defaultService }: ContactFormProps) {
 
     setStatus('loading');
     setResponseMsg('');
+    isSubmitting.current = true;
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 30000);
 
     try {
-      const response = await fetch('/contact.php', {
+      const response = await fetch('/api/contact.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          privacy: formData.privacy ? 'accepted' : '',
+        }),
+        credentials: 'same-origin',
+        signal: controller.signal,
       });
 
-      const result = await response.json();
+      let result: {
+        ok?: boolean;
+        success?: boolean;
+        message?: string;
+        errors?: Record<string, string>;
+      };
 
-      if (response.ok && result.success) {
+      try {
+        result = await response.json();
+      } catch {
+        throw new Error(
+          `A szerver nem tudta feldolgozni az üzenetet (HTTP ${response.status}). Kérjük, próbálja újra később!`
+        );
+      }
+
+      if (response.ok && (result.ok === true || result.success === true)) {
         setStatus('success');
         setResponseMsg(
           result.message ||
@@ -94,7 +117,7 @@ export default function ContactForm({ defaultService }: ContactFormProps) {
           service: '',
           message: '',
           privacy: false,
-          honeypot: '',
+          website: '',
         });
       } else {
         setStatus('error');
@@ -109,8 +132,13 @@ export default function ContactForm({ defaultService }: ContactFormProps) {
       console.error(err);
       setStatus('error');
       setResponseMsg(
-        'Váratlan hiba történt a küldés során. Kérjük, hívjon minket közvetlenül a +36 70 866 9059-es telefonszámon!'
+        err instanceof Error && err.name !== 'AbortError'
+          ? err.message
+          : 'Nem kaptunk visszaigazolást a küldésről. Az adatai megmaradtak; kérjük, ellenőrizze a kapcsolatot, vagy hívjon minket a +36 70 866 9059-es telefonszámon!'
       );
+    } finally {
+      window.clearTimeout(timeoutId);
+      isSubmitting.current = false;
     }
   };
 
@@ -156,11 +184,12 @@ export default function ContactForm({ defaultService }: ContactFormProps) {
           <label htmlFor="website">Website</label>
           <input
             id="website"
+            name="website"
             type="text"
             tabIndex={-1}
             autoComplete="off"
-            value={formData.honeypot}
-            onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+            value={formData.website}
+            onChange={(e) => setFormData({ ...formData, website: e.target.value })}
           />
         </div>
 
