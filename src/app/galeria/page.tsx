@@ -80,11 +80,11 @@ const galleryItems = [
   },
   {
     id: 10,
-    title: 'Szalon részlet',
-    category: 'salon',
-    categoryName: 'Kozmetika & Szalon',
+    title: 'Szemöldök styling',
+    category: 'brows',
+    categoryName: 'Szemöldök styling',
     src: '/images/gallery-salon-4.jpg',
-    desc: 'Elegáns kiegészítők és nyugtató hangulatvilágítás.',
+    desc: 'Természetes hatású szempilla- és szemöldök styling.',
   },
   {
     id: 11,

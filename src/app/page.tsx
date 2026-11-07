@@ -234,7 +234,7 @@ export default function HomePage() {
                 <ul className="space-y-2 text-xs text-stone-500 border-t border-stone-100 pt-4 mb-6">
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="w-3.5 h-3.5 text-[#DCA54A]" />
-                    <span>Szempilla-lifting festéssel (60 perc)</span>
+                    <span>Szempilla-lifting festéssel</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="w-3.5 h-3.5 text-[#DCA54A]" />
