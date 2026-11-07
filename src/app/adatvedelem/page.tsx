@@ -3,9 +3,10 @@ import Link from 'next/link';
 import { ShieldCheck, ArrowLeft, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Adatvédelmi és Adatkezelési Tájékoztató | Beauty Studio Zugló by Alexa',
+  title: 'Adatvédelmi tájékoztató',
   description:
     'A beautystudiozuglo.hu hivatalos adatvédelmi és adatkezelési tájékoztatója (GDPR). Kohári Alexandra egyéni vállalkozó.',
+  alternates: { canonical: '/adatvedelem/' },
 };
 
 export default function PrivacyPolicyPage() {

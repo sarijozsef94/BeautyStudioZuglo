@@ -4,9 +4,16 @@ import ContactForm from '@/components/ContactForm';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Kapcsolat & Időpontfoglalás | Beauty Studio Zugló by Alexa',
+  title: 'Kapcsolat és időpontfoglalás',
   description:
-    'Lépj kapcsolatba Kohári Alexandrával. 1141 Budapest, Mogyoródi út 127/b. Telefon: +36 70 866 9059. Rugalmas nyitvatartás, kényelmes parkolás és professzionális kiszolgálás Zuglóban.',
+    'Időpontfoglalás a Beauty Studio Zugló kozmetikába: 1141 Budapest, Mogyoródi út 127/b. Telefon: +36 70 866 9059. Nyitvatartás, megközelítés és ingyenes parkolás.',
+  alternates: { canonical: '/kapcsolat/' },
+  openGraph: {
+    title: 'Kapcsolat és időpontfoglalás – Kozmetika Zugló',
+    description:
+      'Elérhetőségek, nyitvatartás és megközelítés a Beauty Studio Zugló kozmetikához.',
+    url: '/kapcsolat/',
+  },
 };
 
 export default function ContactPage() {
@@ -82,12 +89,9 @@ export default function ContactPage() {
                       <Mail className="w-5 h-5" />
                     </div>
                     <div className="text-sm">
-                      <span className="font-semibold text-stone-900 block">E-mail címek</span>
+                      <span className="font-semibold text-stone-900 block">E-mail cím</span>
                       <a href="mailto:alexandrakohari@beautystudiozuglo.hu" className="text-stone-600 hover:text-[#B57E29] block break-all">
                         alexandrakohari@beautystudiozuglo.hu
-                      </a>
-                      <a href="mailto:info@beautystudiozuglo.hu" className="text-stone-500 hover:text-[#B57E29] text-xs block mt-0.5">
-                        info@beautystudiozuglo.hu
                       </a>
                     </div>
                   </div>
@@ -124,14 +128,14 @@ export default function ContactPage() {
                   <span>Megközelítés & Parkolás</span>
                 </div>
                 <p>
-                  A stúdió Zuglóban, a Mogyoródi úton található. Autóval érkezőknek az utcában és a környező kisutcákban általában könnyen található szabad parkolóhely.
+                  A kozmetika épülete előtt ingyenes parkolásra van lehetőség.
                 </p>
                 <div className="flex items-center space-x-3 text-[#0F172A] font-semibold pt-1">
                   <Bus className="w-4 h-4 text-[#B57E29]" />
                   <span>Tömegközlekedés</span>
                 </div>
                 <p>
-                  A 82-es és 82A trolibusszal, valamint az Örs vezér tere és az Uzsoki Utcai Kórház felől induló buszjáratokkal közvetlenül és kényelmesen megközelíthető.
+                  A 82-es és 81-es trolibusszal, illetve a 3-as villamossal lehet a legkönnyebben megközelíteni.
                 </p>
               </div>
             </div>

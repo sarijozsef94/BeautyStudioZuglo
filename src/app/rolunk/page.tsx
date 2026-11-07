@@ -4,9 +4,16 @@ import { Award, Heart, CheckCircle2, Calendar, Phone, ArrowRight, ShieldCheck, S
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Rólunk | Beauty Studio Zugló by Alexa',
+  title: 'Rólunk és szakmai szemléletünk',
   description:
-    'Ismerd meg Kohári Alexandra okleveles kozmetikust és a Beauty Studio Zugló filozófiáját. Személyre szabott törődés, professzionális termékek és tudatos bőrápolás Zuglóban.',
+    'Ismerd meg Kohári Alexandrát, a Beauty Studio Zugló by Alexa okleveles kozmetikusát és a személyre szabott, tudatos bőrápolásra épülő szemléletet.',
+  alternates: { canonical: '/rolunk/' },
+  openGraph: {
+    title: 'Rólunk – Kohári Alexandra kozmetikus',
+    description:
+      'Ismerd meg Kohári Alexandrát és a Beauty Studio Zugló személyre szabott kozmetikai szemléletét.',
+    url: '/rolunk/',
+  },
 };
 
 export default function AboutPage() {

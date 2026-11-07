@@ -3,6 +3,20 @@ import Link from 'next/link';
 import { Sparkles, Calendar, ArrowRight, ShieldCheck, Clock, MapPin, Phone, Star, Tag, Award, CheckCircle } from 'lucide-react';
 import ContactForm from '@/components/ContactForm';
 import TestimonialSlider from '@/components/TestimonialSlider';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Kozmetika Zuglóban | Beauty Studio Zugló',
+  description:
+    'Beauty Studio Zugló by Alexa: személyre szabott arckezelések, szempilla-lifting, szemöldök styling és alkalmi smink Budapest XIV. kerületében. Nézd meg árainkat és kérj időpontot!',
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'Kozmetika Zuglóban – Beauty Studio Zugló by Alexa',
+    description:
+      'Személyre szabott arckezelések, szempilla-lifting és szemöldök styling Budapest XIV. kerületében.',
+    url: '/',
+  },
+};
 
 export default function HomePage() {
   return (

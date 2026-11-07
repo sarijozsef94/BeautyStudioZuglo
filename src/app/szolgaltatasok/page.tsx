@@ -4,9 +4,16 @@ import { Sparkles, Calendar, ArrowRight, ShieldCheck, Heart, Award, CheckCircle 
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Szolgáltatások | Beauty Studio Zugló by Alexa',
+  title: 'Kozmetikai kezelések Zuglóban',
   description:
-    'Professzionális kozmetikai kezelések: Bőrdiagnosztika, Vagheggi fitokozmetika, anti-aging, szempilla-lifting, szemöldöklaminálás, gyantázás és alkalmi smink Budapest 14. kerületében.',
+    'Ismerd meg a Beauty Studio Zugló szolgáltatásait: személyre szabott arckezelések, szempilla-lifting, szemöldök styling, gyantázás és alkalmi smink.',
+  alternates: { canonical: '/szolgaltatasok/' },
+  openGraph: {
+    title: 'Kozmetikai kezelések és szolgáltatások Zuglóban',
+    description:
+      'Személyre szabott arckezelések, szempilla-lifting, szemöldök styling, gyantázás és alkalmi smink.',
+    url: '/szolgaltatasok/',
+  },
 };
 
 const serviceSections = [
